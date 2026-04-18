@@ -18,7 +18,7 @@ food_name_global = input("please input your food name: ")
 def usda_food_info_receiver(food_name_local):
     usda_response = requests.get(f"{base_usda_url}search?api_key={my_usda_api_key}&query={food_name_local}%20")
     if usda_response.status_code != 200:
-        print(f"sorry bad I can't pull data from the server the error is: {usda_response}")
+        print(f"Sorry, I can't pull data from the server the error is: {usda_response}")
     else:
         return usda_response.json()
 
