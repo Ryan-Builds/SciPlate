@@ -5,13 +5,16 @@ import requests
 base_usda_url = "https://api.nal.usda.gov/fdc/v1/foods/"
 
 #Here I wanna ask the user to enter the food item
-food_name_global = input("please input your food name")
+food_name_global = input("please input your food name: ")
 
 #let's try to get info from the USDA website using our API key,
 #I will do it using parameters inside the function below
 def usda_food_info_receiver(food_name_local):
     usda_response = requests.get(f"{base_usda_url}search?api_key=DEMO_KEY&query={food_name_local}%20")
-    return usda_response
+    if usda_response.status_code != 200:
+        print("unfortunately I can't find your chosen food")
+    else:
+        return usda_response.json()
 
 print(usda_food_info_receiver(food_name_global))
 
