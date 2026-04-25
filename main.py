@@ -23,7 +23,6 @@ def usda_food_info_receiver(food_name_local):
         return usda_response.json()
 
 print(usda_food_info_receiver(food_name_global))
-#just trying 
 
 
 
