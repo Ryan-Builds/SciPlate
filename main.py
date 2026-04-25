@@ -26,10 +26,8 @@ def usda_food_info_receiver(food_name_local):
     else:
         return usda_response.json()
 
-returned_info_usda = usda_food_info_receiver(food_name_global)['foods']
+returned_info_usda = usda_food_info_receiver(food_name_global)
 
-# print(returned_info_usda)
-#def usda_food_info_cleaner(food_info_usda):
 
 
 
