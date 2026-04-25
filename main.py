@@ -1,6 +1,8 @@
 import os
 import requests
 from dotenv import dotenv_values, load_dotenv
+from pprint import pprint
+import pandas as pd
 
 #loading my API key from the config file
 load_dotenv("config.env")
@@ -11,7 +13,9 @@ my_usda_api_key = os.getenv("usda_api_key")
 base_usda_url = "https://api.nal.usda.gov/fdc/v1/foods/"
 
 #Here I wanna ask the user to enter the food item
-food_name_global = input("please input your food name: ")
+# asking the user :food_name_global = input("please input your food name: ")
+#for now we can use one variable for testing
+food_name_global = "apple"
 
 #let's try to get info from the USDA website using our API key,
 #I will do it using parameters inside the function below
@@ -22,7 +26,11 @@ def usda_food_info_receiver(food_name_local):
     else:
         return usda_response.json()
 
-print(usda_food_info_receiver(food_name_global))
+returned_info_usda = usda_food_info_receiver(food_name_global)['foods']
+
+# print(returned_info_usda)
+#def usda_food_info_cleaner(food_info_usda):
+
 
 
 
