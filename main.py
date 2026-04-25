@@ -15,7 +15,7 @@ base_usda_url = "https://api.nal.usda.gov/fdc/v1/foods/"
 #Here I wanna ask the user to enter the food item
 # asking the user :food_name_global = input("please input your food name: ")
 #for now we can use one variable for testing
-food_name_global = "apple"
+food_name_global = input("Please enter a food item: ")
 
 #let's try to get info from the USDA website using our API key,
 #I will do it using parameters inside the function below
