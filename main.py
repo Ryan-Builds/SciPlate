@@ -30,11 +30,11 @@ def food_name_input():
             print(f"Sorry, I can't pull data from the server the error is: {usda_response}")
         else:
             return usda_response.json()
-    returned_info_usda = usda_food_info_receiver(food_name_chosen)
+    returned_info_usda_json = usda_food_info_receiver(food_name_chosen)
 
-    return returned_info_usda, food_name_chosen
+    return returned_info_usda_json, food_name_chosen
 
-#the returned_info_usda is a massive dictionary, containing different levels,
+#the returned_info_usda_json is a massive dictionary, containing different levels,
 #in each level we got lists of dictionaries inside each one we might find more useful info
 #Here i will create another function that will extract the useful info for us
 #The info that might be useful for the app is anything related to the nutrition values of the food
@@ -59,12 +59,17 @@ def usda_food_info_extractor(usda_data):
     #ok let's try to show the user all the found matches, he will choose the number
     #and based on the chosen number we can drilldown into the data
     if len(foundation_data)==0:
-        print("Sorry I was not able to find any match for the food item :(, please try me again by choosing another item\n")
-        main_app()
+        print("Sorry I was not able to find any match for the food item :(, Do you want to try again with another item or exit?")
+        users_response = input(". Please select (y or n):")
+        if users_response.lower()[0] == "y":
+            main_app()
+        elif users_response.lower()[0] == "n":
+            return 0
+            
     else:
         print(f"Good news, I have found {len(foundation_data)} matches \n")
         for i, j in enumerate(foundation_data):
-            print(f"the item number {i}: {j['description']}")
+            print(f"item number {i}: {j['description']}")
         chosen_number = int(input("\nPlease choose your desired item number: "))
         chosen_item = foundation_data[chosen_number]
 
@@ -91,11 +96,13 @@ def usda_food_info_extractor(usda_data):
 
 def main_app():
     returned_data = food_name_input()
-    returned_info_usda = returned_data[0]
+    returned_info_usda_json_global = returned_data[0]
     food_name_global = returned_data[1]
-    if returned_info_usda is not None:
+    item_1_calories = usda_food_info_extractor(returned_info_usda_json_global)
+    if (returned_info_usda_json_global is not None):
         print(f"The API call for the food item {food_name_global}from USDA database has been successful. I will clean the data now\n")
-        print(f"\nThe energy content of 100 grams of {food_name_global} is: {usda_food_info_extractor(returned_info_usda)} KCAL \n")
+        if item_1_calories != 0:    
+            print(f"\nThe energy content of 100 grams of {food_name_global} is: {item_1_calories} KCAL \n") 
         print("Thank you for using SciPlate :) see you again soon\n")
     else:
         print(f"Sorry I was not able to get data from USDA for {food_name_global} \n")
