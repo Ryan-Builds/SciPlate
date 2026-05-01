@@ -14,7 +14,7 @@ my_usda_api_key = "DEMO_KEY"
 
 #this is the base url from the usda webite, later in the function,
 #I will add the necessary missing characters
-#base_usda_url = "https://api.nal.usda.gov/fdc/v1/foods/"
+base_usda_url = "https://api.nal.usda.gov/fdc/v1/foods/"
 
 #Here I wanna ask the user to enter the food item
 # asking the user :food_name_global = input("please input your food name: ")
