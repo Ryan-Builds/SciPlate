@@ -15,18 +15,20 @@ base_usda_url = "https://api.nal.usda.gov/fdc/v1/foods/"
 #Here I wanna ask the user to enter the food item
 # asking the user :food_name_global = input("please input your food name: ")
 #for now we can use one variable for testing
-food_name_global = input("Please enter a food item: ")
+def food_name_input():
+    food_name_chosen = input("Please enter a food item: ")
 
-#let's try to get info from the USDA website using our API key,
-#I will do it using parameters inside the function below
-def usda_food_info_receiver(food_name_local):
-    usda_response = requests.get(f"{base_usda_url}search?api_key={my_usda_api_key}&query={food_name_local}%20")
-    if usda_response.status_code != 200:
-        print(f"Sorry, I can't pull data from the server the error is: {usda_response}")
-    else:
-        return usda_response.json()
+    #let's try to get info from the USDA website using our API key,
+    #I will do it using parameters inside the function below
+    def usda_food_info_receiver(food_name_local):
+        usda_response = requests.get(f"{base_usda_url}search?api_key={my_usda_api_key}&query={food_name_local}%20")
+        if usda_response.status_code != 200:
+            print(f"Sorry, I can't pull data from the server the error is: {usda_response}")
+        else:
+            return usda_response.json()
+    returned_info_usda = usda_food_info_receiver(food_name_chosen)
 
-returned_info_usda = usda_food_info_receiver(food_name_global)
+    return returned_info_usda, food_name_chosen
 
 #the returned_info_usda is a massive dictionary, containing different levels,
 #in each level we got lists of dictionaries inside each one we might find more useful info
@@ -52,44 +54,47 @@ def usda_food_info_extractor(usda_data):
 
     #ok let's try to show the user all the found matches, he will choose the number
     #and based on the chosen number we can drilldown into the data
+    if len(foundation_data)==0:
+        print("Sorry I was not able to find any match for the food item :(, please try me again by choosing another item\n")
+        main_app()
+    else:
+        print(f"Good news, I have found {len(foundation_data)} matches \n")
+        for i, j in enumerate(foundation_data):
+            print(f"the item number {i}: {j['description']}")
+        chosen_number = int(input("\nPlease choose your desired item number: "))
+        chosen_item = foundation_data[chosen_number]
 
-    print(f"Good news, I have found {len(foundation_data)} matches")
-    for i, j in enumerate(foundation_data):
-        print(f"the item number {i}: {j['description']}")
-    chosen_number = int(input("Please choose your desired item number: "))
-    chosen_item = foundation_data[chosen_number]
+        # the chosen food item here is now a dictionary, the key we need is called "foodNutrients"
+        #let's drilldown to the key as well
 
-    # the chosen food item here is now a dictionary, the key we need is called "foodNutrients"
-    #let's drilldown to the key as well
+        chosen_item_nutrients = chosen_item['foodNutrients']
+        
+        #ok at this point user has chosen the desired item, we can drill down
+        #I will extract and show the calorie for finishing the day
+        calorie_list = []
+        for info in chosen_item_nutrients:
+            if (info['unitName'] == 'KCAL') and (info['nutrientNumber'] == '208'):
+                calorie_list.append(info)
+            if (len(calorie_list)== 0) and (info['unitName'] =='KCAL') and (info['nutrientNumber'] == '957'):    	
+                calorie_list.append(info)
 
-    chosen_item_nutrients = chosen_item['foodNutrients']
-    
-    #ok at this point user has chosen the desired item, we can drill down
-    #I will extract and show the calorie for finishing the day
-    calorie_list = []
-    for info in chosen_item_nutrients:
-        if 'Energy' in info['nutrientName']:
-            calorie_list.append(info)
-    calorie_list2 = []
-    for i in calorie_list:
-        calorie_list2.append(i['value'])
+        calorie_list2 = []
+        for i in calorie_list:
+            calorie_list2.append(i['value'])
+            
+        return calorie_list2
 
-    print(calorie_list2)
+
+def main_app():
+    returned_data = food_name_input()
+    returned_info_usda = returned_data[0]
+    food_name_global = returned_data[1]
+    if returned_info_usda is not None:
+        print(f"The API call for the food item {food_name_global}from USDA database has been successful. I will clean the data now\n")
+        print(f"\nThe energy content of 100 grams of {food_name_global} is: {usda_food_info_extractor(returned_info_usda)} KCAL \n")
+        print("Thank you for using SciPlate :) see you again soon")
+    else:
+        print(f"Sorry I was not able to get data from USDA for {food_name_global} \n")
 
 #let's try
-
-if returned_info_usda is not None:
-    print(f"""The API call for the food item {food_name_global}
-       from USDA database has been successful. I will clean the data now""")
-    extracted_info_usda = usda_food_info_extractor(returned_info_usda)
-else:
-    print(f"Sorry I was not able to get data from USDA for {food_name_global}")
-
-
-
-
-
-
-
-
-
+main_app()
