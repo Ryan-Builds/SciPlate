@@ -1,3 +1,2 @@
-a = "Abc"
-b = a.lower()[0]
-print(f"the answer is: {b}")
+item_1_nutrition_facts = {'item_1_calories':1 , 'item_1_protein':2}
+print(item_1_nutrition_facts['item_1_calories'])

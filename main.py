@@ -7,10 +7,10 @@ import pandas as pd
 #loading my API key from the config file
 load_dotenv("config.env")
 #For my own use I will use the following API key 
-#my_usda_api_key = os.getenv("usda_api_key")
+my_usda_api_key = os.getenv("usda_api_key")
 
 #for public testing a demo API key is available:
-my_usda_api_key = "DEMO_KEY"
+#my_usda_api_key = "DEMO_KEY"
 
 #this is the base url from the usda webite, later in the function,
 #I will add the necessary missing characters
@@ -80,32 +80,31 @@ def usda_food_info_extractor(usda_data):
         
         #ok at this point user has chosen the desired item, we can drill down
         #I will extract and show the calorie for finishing the day
+        #calory finder:
         calorie_list = []
         for info in chosen_item_nutrients:
             if (info['unitName'] == 'KCAL') and (info['nutrientNumber'] == '208'):
-                calorie_list.append(info)
-            if (len(calorie_list)== 0) and (info['unitName'] =='KCAL') and (info['nutrientNumber'] == '957'):    	
-                calorie_list.append(info)
+                calorie = info['value']
+            elif (info['unitName'] =='KCAL') and (info['nutrientNumber'] == '957'):    	
+                calorie = info['value']
 
-        calorie_list2 = []
-        for i in calorie_list:
-            calorie_list2.append(i['value'])
-            
-        return calorie_list2
+        #protein finder:
+        for info in chosen_item_nutrients:
+            if (info['nutrientName'] == 'Protein') and (info['nutrientNumber'] == '203'):
+                protein = info['value']
+
+
+        return {'Calorie':calorie, 'Protein':protein}
 
 
 def main_app():
     returned_data = food_name_input()
     returned_info_usda_json_global = returned_data[0]
     food_name_global = returned_data[1]
-    item_1_calories = usda_food_info_extractor(returned_info_usda_json_global)
-    if (returned_info_usda_json_global is not None):
-        if item_1_calories != 0:    
-            print(f"\nThe energy content of 100 grams of {food_name_global} is: {item_1_calories} KCAL \n") 
-            print(f"The API call for the food item {food_name_global}from USDA database has been successful. I will clean the data now\n")
-        print("Thank you for using SciPlate :) see you again soon\n")
-    else:
-        print(f"Sorry I was not able to get data from USDA for {food_name_global} \n")
+    item_1_nutrition_facts = usda_food_info_extractor(returned_info_usda_json_global)
+    return returned_info_usda_json_global, food_name_global, item_1_nutrition_facts
 
 #let's try
-main_app()
+new_list = main_app()
+print(f"in 100 grams of {new_list[1]}, There are {new_list[2]['Calorie']} calories and {new_list[2]['Protein']} grams of protein.\n\nThank you for using Sciplate, see you again soon, Ryan :)")
+
