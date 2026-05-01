@@ -7,7 +7,7 @@ import pandas as pd
 #loading my API key from the config file
 load_dotenv("config.env")
 #For my own use I will use the following API key 
-my_usda_api_key = os.getenv("usda_api_key")
+#my_usda_api_key = os.getenv("usda_api_key")
 
 #for public testing a demo API key is available:
 my_usda_api_key = "DEMO_KEY"
