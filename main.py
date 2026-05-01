@@ -6,7 +6,11 @@ import pandas as pd
 
 #loading my API key from the config file
 load_dotenv("config.env")
-my_usda_api_key = os.getenv("usda_api_key")
+#For my own use I will use the following API key 
+#my_usda_api_key = os.getenv("usda_api_key")
+
+#for public testing a demo API key is available:
+my_usda_api_key = "DEMO_KEY"
 
 #this is the base url from the usda webite, later in the function,
 #I will add the necessary missing characters
@@ -92,7 +96,7 @@ def main_app():
     if returned_info_usda is not None:
         print(f"The API call for the food item {food_name_global}from USDA database has been successful. I will clean the data now\n")
         print(f"\nThe energy content of 100 grams of {food_name_global} is: {usda_food_info_extractor(returned_info_usda)} KCAL \n")
-        print("Thank you for using SciPlate :) see you again soon")
+        print("Thank you for using SciPlate :) see you again soon\n")
     else:
         print(f"Sorry I was not able to get data from USDA for {food_name_global} \n")
 
