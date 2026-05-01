@@ -7,14 +7,14 @@ import pandas as pd
 #loading my API key from the config file
 load_dotenv("config.env")
 #For my own use I will use the following API key 
-#my_usda_api_key = os.getenv("usda_api_key")
+my_usda_api_key = os.getenv("usda_api_key")
 
 #for public testing a demo API key is available:
 my_usda_api_key = "DEMO_KEY"
 
 #this is the base url from the usda webite, later in the function,
 #I will add the necessary missing characters
-base_usda_url = "https://api.nal.usda.gov/fdc/v1/foods/"
+#base_usda_url = "https://api.nal.usda.gov/fdc/v1/foods/"
 
 #Here I wanna ask the user to enter the food item
 # asking the user :food_name_global = input("please input your food name: ")
