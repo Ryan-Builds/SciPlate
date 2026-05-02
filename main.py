@@ -7,9 +7,9 @@ import pandas as pd
 #loading my API key from the config file
 load_dotenv("config.env")
 #For my own use I will use the following API key 
-my_usda_api_key = os.getenv("usda_api_key")
+#my_usda_api_key = os.getenv("usda_api_key")
 #for public testing a demo API key is available:
-#my_usda_api_key = "DEMO_KEY"
+my_usda_api_key = "DEMO_KEY"
 
 #this is the base url from the usda webite, later in the function,
 #I will add the necessary missing characters
@@ -108,10 +108,13 @@ def main_app():
 
 #let's try
 new_list = main_app()
-print(f"""\nin 100 grams of {new_list[1]}, There are:\n
-\t{new_list[2]['Calorie']} calories
-\t{new_list[2]['Protein']} grams of protein
-\t{new_list[2]['Carbs']} grams of carbohydrates
-\t{new_list[2]['Fat']} grams of fat\n
-Thank you for using Sciplate, see you again soon, Ryan :)\n""")
+if new_list[2] == 0:
+    print("Hopefully next time I'll do better! Thank you for using Sciplate, see you again soon, Ryan :)")
+else:
+    print(f"""\nin 100 grams of {new_list[1]}, There are:\n
+    \t{new_list[2]['Calorie']} calories
+    \t{new_list[2]['Protein']} grams of protein
+    \t{new_list[2]['Carbs']} grams of carbohydrates
+    \t{new_list[2]['Fat']} grams of fat\n
+    Thank you for using Sciplate, see you again soon, Ryan :)\n""")
 
