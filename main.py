@@ -7,9 +7,9 @@ import pandas as pd
 #loading my API key from the config file
 load_dotenv("config.env")
 #For my own use I will use the following API key 
-#my_usda_api_key = os.getenv("usda_api_key")
+my_usda_api_key = os.getenv("usda_api_key")
 #for public testing a demo API key is available:
-my_usda_api_key = "DEMO_KEY"
+#my_usda_api_key = "DEMO_KEY"
 
 #this is the base url from the usda webite, later in the function,
 #I will add the necessary missing characters
@@ -80,26 +80,19 @@ def usda_food_info_extractor(usda_data):
         #ok at this point user has chosen the desired item, we can drill down
         #I will extract and return the nutrition values
         #calory finder:
-        calorie_list = []
         for info in chosen_item_nutrients:
             if (info['unitName'] == 'KCAL') and (info['nutrientNumber'] == '208'):
                 calorie = info['value']
             elif (info['unitName'] =='KCAL') and (info['nutrientNumber'] == '957'):    	
                 calorie = info['value']
-
         #protein finder:
-        for info in chosen_item_nutrients:
-            if (info['nutrientName'] == 'Protein') and (info['nutrientNumber'] == '203'):
+            elif (info['nutrientName'] == 'Protein') and (info['nutrientNumber'] == '203'):
                 protein = info['value']
-        
         #carb finder:
-        for info in chosen_item_nutrients:
-            if ('Carbohydrate' in info['nutrientName'] ) and (info['nutrientNumber'] == '205'):
+            elif ('Carbohydrate' in info['nutrientName'] ) and (info['nutrientNumber'] == '205'):
                 carbs = info['value']
-
         #fat finder:
-        for info in chosen_item_nutrients:
-            if ('fat' in info['nutrientName'] ) and (info['nutrientNumber'] == '204'):
+            elif ('fat' in info['nutrientName'] ) and (info['nutrientNumber'] == '204'):
                 fat = info['value']
 
 
