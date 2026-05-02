@@ -8,7 +8,6 @@ import pandas as pd
 load_dotenv("config.env")
 #For my own use I will use the following API key 
 #my_usda_api_key = os.getenv("usda_api_key")
-
 #for public testing a demo API key is available:
 my_usda_api_key = "DEMO_KEY"
 
@@ -79,7 +78,7 @@ def usda_food_info_extractor(usda_data):
         chosen_item_nutrients = chosen_item['foodNutrients']
         
         #ok at this point user has chosen the desired item, we can drill down
-        #I will extract and show the calorie for finishing the day
+        #I will extract and return the nutrition values
         #calory finder:
         calorie_list = []
         for info in chosen_item_nutrients:
@@ -92,9 +91,19 @@ def usda_food_info_extractor(usda_data):
         for info in chosen_item_nutrients:
             if (info['nutrientName'] == 'Protein') and (info['nutrientNumber'] == '203'):
                 protein = info['value']
+        
+        #carb finder:
+        for info in chosen_item_nutrients:
+            if ('Carbohydrate' in info['nutrientName'] ) and (info['nutrientNumber'] == '205'):
+                carbs = info['value']
+
+        #fat finder:
+        for info in chosen_item_nutrients:
+            if ('fat' in info['nutrientName'] ) and (info['nutrientNumber'] == '204'):
+                fat = info['value']
 
 
-        return {'Calorie':calorie, 'Protein':protein}
+        return {'Calorie':calorie, 'Protein':protein, 'Carbs': carbs, 'Fat': fat}
 
 
 def main_app():
@@ -106,5 +115,10 @@ def main_app():
 
 #let's try
 new_list = main_app()
-print(f"in 100 grams of {new_list[1]}, There are {new_list[2]['Calorie']} calories and {new_list[2]['Protein']} grams of protein.\n\nThank you for using Sciplate, see you again soon, Ryan :)")
+print(f"""\nin 100 grams of {new_list[1]}, There are:\n
+\t{new_list[2]['Calorie']} calories
+\t{new_list[2]['Protein']} grams of protein
+\t{new_list[2]['Carbs']} grams of carbohydrates
+\t{new_list[2]['Fat']} grams of fat\n
+Thank you for using Sciplate, see you again soon, Ryan :)\n""")
 
