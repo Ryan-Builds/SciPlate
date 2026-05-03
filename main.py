@@ -3,13 +3,15 @@ import requests
 from dotenv import dotenv_values, load_dotenv
 from pprint import pprint
 import pandas as pd
+from datetime import datetime
 
 #loading my API key from the config file
 load_dotenv("config.env")
 #For my own use I will use the following API key 
-#my_usda_api_key = os.getenv("usda_api_key")
+my_usda_api_key = os.getenv("usda_api_key")
+
 #for public testing a demo API key is available:
-my_usda_api_key = "DEMO_KEY"
+#my_usda_api_key = "DEMO_KEY"
 
 #this is the base url from the usda webite, later in the function,
 #I will add the necessary missing characters
@@ -104,7 +106,8 @@ def main_app():
     returned_info_usda_json_global = returned_data[0]
     food_name_global = returned_data[1]
     item_1_nutrition_facts = usda_food_info_extractor(returned_info_usda_json_global)
-    return returned_info_usda_json_global, food_name_global, item_1_nutrition_facts
+    now = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    return returned_info_usda_json_global, food_name_global, item_1_nutrition_facts, now
 
 #let's try
 new_list = main_app()
@@ -116,5 +119,6 @@ else:
     \t{new_list[2]['Protein']} grams of protein
     \t{new_list[2]['Carbs']} grams of carbohydrates
     \t{new_list[2]['Fat']} grams of fat\n
-    Thank you for using Sciplate, see you again soon, Ryan :)\n""")
+    \tyour registered time for this item is: {new_list[3]}\n
+Thank you for using Sciplate, see you again soon, Ryan :)\n""")
 
