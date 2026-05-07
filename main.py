@@ -17,9 +17,12 @@ my_usda_api_key = "DEMO_KEY"
 #I will add the necessary missing characters
 base_usda_url = "https://api.nal.usda.gov/fdc/v1/foods/"
 
-#Here I wanna ask the user to enter the food item
-# asking the user :food_name_global = input("please input your food name: ")
-#for now we can use one variable for testing
+"""
+Here I wanna ask the user to enter the food item
+asking the user :food_name_global = input("please input your food name: ")
+for now we can use one variable for testing
+"""
+
 def food_name_input():
     food_name_chosen = input("Please enter a food item: ")
 
@@ -35,14 +38,16 @@ def food_name_input():
 
     return returned_info_usda_json, food_name_chosen
 
-#the returned_info_usda_json is a massive dictionary, containing different levels,
-#in each level we got lists of dictionaries inside each one we might find more useful info
-#Here i will create another function that will extract the useful info for us
-#The info that might be useful for the app is anything related to the nutrition values of the food
-#that includes, energy, macronutrients, and micronutrients.. so this is what we will try to extract
-#the dictionary in one example case had 7 main keys one of which is called "foods" that interest us
-#inside the USDA database we have different datatypes such as Branded and Foundation
-#for now we will extract the data related to the foundation only
+"""
+the returned_info_usda_json is a massive dictionary, containing different levels,
+in each level we got lists of dictionaries inside each one we might find more useful info
+Here i will create another function that will extract the useful info for us
+The info that might be useful for the app is anything related to the nutrition values of the food
+that includes, energy, macronutrients, and micronutrients.. so this is what we will try to extract
+the dictionary in one example case had 7 main keys one of which is called "foods" that interest us
+inside the USDA database we have different datatypes such as Branded and Foundation
+for now we will extract the data related to the foundation only
+"""
 
 def usda_food_info_extractor(usda_data):
     #first step is to get into the food level
