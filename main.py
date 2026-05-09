@@ -148,7 +148,7 @@ def user_interface():
     while users_input == "y":
         new_line = main_app()
         lines.append(new_line)
-        users_input = input("Do you wish to enter your insert your next item? (y or n)")
+        users_input = input("Do you wish to enter your insert your next item? (y or n)").lower()
 
 
     for id, item in enumerate(lines):
