@@ -1,3 +1,4 @@
+
 import os
 import requests
 from dotenv import dotenv_values, load_dotenv
@@ -123,7 +124,6 @@ def usda_food_info_extractor(usda_data):
         elif ('fat' in info['nutrientName'] ) and (info['nutrientNumber'] == '204'):
             fat = info['value']
 
-
     return {'Calorie':calorie, 'Protein':protein, 'Carbs': carbs, 'Fat': fat}
 
 
@@ -131,20 +131,32 @@ def main_app():
     returned_data = food_name_input()
     returned_info_usda_json_global = returned_data[0]
     food_name_global = returned_data[1]
-    item_1_nutrition_facts = usda_food_info_extractor(returned_info_usda_json_global)
+    item_nutrition_facts = usda_food_info_extractor(returned_info_usda_json_global)
     now = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-    return returned_info_usda_json_global, food_name_global, item_1_nutrition_facts, now
+    return {'Food': food_name_global, 'Nutrition Facts': item_nutrition_facts, 'Time': now}
 
 #let's try
-new_list = main_app()
-if new_list[2] == 0:
-    print("Hopefully next time I'll do better! Thank you for using Sciplate, see you again soon, Ryan :)")
-else:
-    print(f"""\nin 100 grams of {new_list[1]}, There are:\n
-    \t{new_list[2]['Calorie']} calories
-    \t{new_list[2]['Protein']} grams of protein
-    \t{new_list[2]['Carbs']} grams of carbohydrates
-    \t{new_list[2]['Fat']} grams of fat\n
-    \tyour registered time for this item is: {new_list[3]}\n
-Thank you for using Sciplate, see you again soon, Ryan :)\n""")
+def user_input():
+    username = input("Hi there, please insert your name: ")
+    print(f"Welcome {username} to Sciplate, an app that helps you improve your diet based on science.")
+    return username
 
+def user_interface():
+    lines = []
+    User = user_input()
+    users_input = "y"
+    while users_input == "y":
+        new_line = main_app()
+        lines.append(new_line)
+        users_input = input("Do you wish to enter your insert your next item? (y or n)")
+
+
+    for id, item in enumerate(lines):
+        print(f"""\nAt {item['Time']} you registered the item number {id + 1} which is {item['Food']}. For 100 grams of {item['Food']} we got:\n 
+        {item['Nutrition Facts']['Calorie']} number of calories,
+        {item['Nutrition Facts']['Carbs']} grams of carbohydrates,
+        {item['Nutrition Facts']['Protein']} grams of protein,
+        {item['Nutrition Facts']['Fat']} grams of fat""")
+
+
+user_interface()
