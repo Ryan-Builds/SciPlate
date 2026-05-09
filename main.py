@@ -1,4 +1,3 @@
-
 import os
 import requests
 from dotenv import dotenv_values, load_dotenv
@@ -9,10 +8,10 @@ from datetime import datetime
 #loading my API key from the config file
 load_dotenv("config.env")
 #For my own use I will use the following API key 
-#my_usda_api_key = os.getenv("usda_api_key")
+my_usda_api_key = os.getenv("usda_api_key")
 
 #for public testing a demo API key is available:
-my_usda_api_key = "DEMO_KEY"
+#my_usda_api_key = "DEMO_KEY"
 
 #this is the base url from the usda webite, later in the function,
 #I will add the necessary missing characters
@@ -94,6 +93,9 @@ def usda_food_info_extractor(usda_data):
 
         chosen_item_nutrients = chosen_item['foodNutrients']
 
+        #Here I will call the next function which extracts some nutrition facts from the JSON which is already filtered in the foodNutrients part
+        return nutrition_facts_extractor(chosen_item_nutrients)
+
     elif len(branded_data) != 0:
         print(f"Good news, I have found {len(branded_data)} matches \n")
         for i, j in enumerate(branded_data):
@@ -105,8 +107,12 @@ def usda_food_info_extractor(usda_data):
         #let's drilldown to the key as well
 
         chosen_item_nutrients = chosen_item['foodNutrients']
-        
-        #ok at this point user has chosen the desired item, we can drill down
+
+        #Here I will call the next function which extracts some nutrition facts from the JSON which is already filtered in the foodNutrients part
+        return nutrition_facts_extractor(chosen_item_nutrients)
+
+def nutrition_facts_extractor(chosen_item_nutrients):
+            #ok at this point user has chosen the desired item, we can drill down
         #I will extract and return the nutrition values
         #calory finder:
     for info in chosen_item_nutrients:
@@ -123,8 +129,14 @@ def usda_food_info_extractor(usda_data):
     #fat finder:
         elif ('fat' in info['nutrientName'] ) and (info['nutrientNumber'] == '204'):
             fat = info['value']
+    #fiber finder
+        elif ('Fiber' in info['nutrientName'] ) and (info['nutrientNumber'] == '291'):
+            fiber = info['value']
+    #sodium finder
+        elif ('Sodium' in info['nutrientName'] ) and (info['nutrientNumber'] == '307'):
+            sodium = info['value']
 
-    return {'Calorie':calorie, 'Protein':protein, 'Carbs': carbs, 'Fat': fat}
+    return {'Calorie':calorie, 'Protein':protein, 'Carbs': carbs, 'Fat': fat, 'Fiber': fiber, 'Sodium': sodium}
 
 
 def main_app():
@@ -155,8 +167,8 @@ def user_interface():
         print(f"""\nAt {item['Time']} you registered the item number {id + 1} which is {item['Food']}. For 100 grams of {item['Food']} we got:\n 
         {item['Nutrition Facts']['Calorie']} number of calories,
         {item['Nutrition Facts']['Carbs']} grams of carbohydrates,
-        {item['Nutrition Facts']['Protein']} grams of protein,
-        {item['Nutrition Facts']['Fat']} grams of fat""")
-
+        {item['Nutrition Facts']['Fat']} grams of fat,       
+        {item['Nutrition Facts']['Fiber']} grams of fiber,
+        {item['Nutrition Facts']['Sodium']} grams of sodium""") 
 
 user_interface()
