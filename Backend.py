@@ -5,26 +5,26 @@ from pprint import pprint
 import pandas as pd
 from datetime import datetime
 
-#loading my API key from the config file
-load_dotenv("config.env")
-#For my own use I will use the following API key 
-#my_usda_api_key = os.getenv("usda_api_key")
-
-#for public testing a demo API key is available:
-my_usda_api_key = "DEMO_KEY"
-
-#this is the base url from the usda webite, later in the function,
-#I will add the necessary missing characters
-base_usda_url = "https://api.nal.usda.gov/fdc/v1/foods/"
-
 """
 Here I wanna ask the user to enter the food item
 asking the user :food_name_global = input("please input your food name: ")
-for now we can use one variable for testing
 """
 
 def food_name_input():
-    food_name_chosen = input("Please enter a food item: ")
+
+    #loading my API key from the config file
+    load_dotenv("config.env")
+    #For my own use I will use the following API key 
+    my_usda_api_key = os.getenv("usda_api_key")
+
+    #for public testing a demo API key is available:
+    #my_usda_api_key = "DEMO_KEY"
+
+    #this is the base url from the usda webite, later in the function,
+    #I will add the necessary missing characters
+    base_usda_url = "https://api.nal.usda.gov/fdc/v1/foods/"
+
+    food_name_chosen = input("Please enter a food item: ").lower().strip()
 
     #let's try to get info from the USDA website using our API key,
     #I will do it using parameters inside the function below
@@ -38,7 +38,7 @@ def food_name_input():
 
     return returned_info_usda_json, food_name_chosen
 
-"""
+""" Details about the JSON and my extractor logic
 the returned_info_usda_json is a massive dictionary, containing different levels,
 in each level we got lists of dictionaries inside each one we might find more useful info
 Here i will create another function that will extract the useful info for us
