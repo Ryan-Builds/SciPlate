@@ -8,10 +8,10 @@ from datetime import datetime
 #loading my API key from the config file
 load_dotenv("config.env")
 #For my own use I will use the following API key 
-#my_usda_api_key = os.getenv("usda_api_key")
+my_usda_api_key = os.getenv("usda_api_key")
 
 #for public testing a demo API key is available:
-my_usda_api_key = "DEMO_KEY"
+#my_usda_api_key = "DEMO_KEY"
 
 #this is the base url from the usda webite, later in the function,
 #I will add the necessary missing characters
@@ -112,9 +112,13 @@ def usda_food_info_extractor(usda_data):
         return nutrition_facts_extractor(chosen_item_nutrients)
 
 def nutrition_facts_extractor(chosen_item_nutrients):
-            #ok at this point user has chosen the desired item, we can drill down
-        #I will extract and return the nutrition values
-        #calory finder:
+    #ok at this point user has chosen the desired item, we can drill down
+    #I will extract and return the nutrition values
+
+    # I am adding this condition in case for a food item we can't find anything the function will not break
+    if chosen_item_nutrients is None:
+        return 0
+    #calory finder:
     for info in chosen_item_nutrients:
         if (info['unitName'] == 'KCAL') and (info['nutrientNumber'] == '208'):
             calorie = info['value']
@@ -135,9 +139,8 @@ def nutrition_facts_extractor(chosen_item_nutrients):
     #sodium finder
         elif ('Sodium' in info['nutrientName'] ) and (info['nutrientNumber'] == '307'):
             sodium = info['value']
-
+    
     return {'Calorie':calorie, 'Protein':protein, 'Carbs': carbs, 'Fat': fat, 'Fiber': fiber, 'Sodium': sodium}
-
 
 def main_app():
     returned_data = food_name_input()
